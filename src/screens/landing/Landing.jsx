@@ -1,10 +1,13 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import './App.css';
+import { useHistory } from 'react-router-dom';
 
 const App = () => {
 
 	let data = [];
+
+	let history = useHistory()
+
 	const [state, setState] = useState({
 		pokemonArray: data,
 		start: 0,
@@ -45,11 +48,10 @@ const App = () => {
 	}
 
 	const viewPokemonDetail = (pokemonName) => () => {
-		axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
-			.then(response => {
-				data = response.data;
-				console.log(data);
-			})
+		history.push(`pokemon-details:${pokemonName}`, {id: pokemonName})
+	}
+
+	const goToPage = () => {
 	}
 
 	return (
@@ -57,13 +59,20 @@ const App = () => {
 			{
 				state.pokemonArray.slice(state.start, state.end).map((item, index) => {
 					return (
-						<div style={{cursor: 'pointer'}} key={index} onClick={viewPokemonDetail(item.name)}>{item.name}</div>
+						<div style={{
+							cursor: 'pointer',
+							backgroundColor: 'lightgrey',
+							marginBottom: '.5rem'
+						}}
+							key={index}
+							onClick={viewPokemonDetail(item.name)}>{item.name}
+						</div>
 					)
 				})
 			}
 			<button onClick={nextPage}>next page</button>
 			<button onClick={prevPage}>previous page</button>
-
+			<button onClick={goToPage}>Specific Pokemon</button>
 		</div>
 	);
 }

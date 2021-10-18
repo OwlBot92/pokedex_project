@@ -1,5 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+  } from "react-router-dom";
 import Landing from '../src/screens/landing/Landing'
 import PokemonDetail from '../src/screens/pokemonDetail/PokemonDetail'
 
@@ -8,7 +12,7 @@ const Routing = () => {
         <Router>
             <Switch>
                 <Route exact path='/' component={Landing} />
-                <Route path='/pokemon-details' component={PokemonDetail}/>
+                <Route path='/pokemon-details:name'component={PokemonDetail}/>
             </Switch>
         </Router>
     )
