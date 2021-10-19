@@ -1,9 +1,14 @@
+:root{
+    --main-pokedex-red: #dd0b2d;
+    --secondary-pokedex-red: #88061c; 
+}
+
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    
 }
+
 body{
     font-family: 'Press Start 2P', cursive;
 }

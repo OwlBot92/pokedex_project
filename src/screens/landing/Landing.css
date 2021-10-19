@@ -16,13 +16,13 @@
     align-items: center;
     justify-content: space-around;
     flex-wrap: wrap;
-    background-color: #dd0b2d;
+    background-color: var(--main-pokedex-red);
     padding: 1rem;
     border-radius: 10px;
-    border-top: 16px solid #88061c;
-    border-bottom: 16px solid #88061c;
-    border-right: 8px solid #88061c;
-    border-left: 8px solid #88061c;
+    border-top: 16px solid var(--secondary-pokedex-red);
+    border-bottom: 16px solid var(--secondary-pokedex-red);
+    border-right: 8px solid var(--secondary-pokedex-red);
+    border-left: 8px solid var(--secondary-pokedex-red);
 }
 
 .landing-pokemon-card{
