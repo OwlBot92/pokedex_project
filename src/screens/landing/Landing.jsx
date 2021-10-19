@@ -1,29 +1,69 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-
+import './Landing.css'
 const App = () => {
 
 	let data = [];
-
 	let history = useHistory()
 
 	const [state, setState] = useState({
 		pokemonArray: data,
+		isDataReady: false,
 		start: 0,
 		end: 20,
 	});
 
 	useEffect(() => {
-		axios.get(`https://pokeapi.co/api/v2/pokemon?offset=0&limit=151`)
-			.then(response => {
-				data = response.data.results;
-				setState({
-					...state,
-					pokemonArray: data
-				})
+		let temp = [];
+		let pokeStorage = JSON.parse(localStorage.getItem('pokeList')) //se non e` ancora stato inizializzato torna null
+		if (pokeStorage !== null) {
+			console.log('storage pieno');
+			let start = parseInt(localStorage.getItem('start')); 
+			let end = parseInt(localStorage.getItem('end'));
+			for (const iterator of pokeStorage) {
+				temp.push(iterator)
+			}
+			setState({
+				...state,
+				start : start,
+				end: end,
+				isDataReady: true,
+				pokemonArray: temp,
 			})
-		console.log('component did mount');
+		}
+		/* PRIMO ACCESSO AL POKEDEX inizializza effettuando la chiamata API la prima volta */
+		else {
+			axios.get(`https://pokeapi.co/api/v2/pokemon?offset=0&limit=151`)
+				.then(response => {
+					data = response.data.results;
+					(async () => {
+						for (const pokemon of data) {
+							let singlePokemonInfo = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon.name}`)
+							let pokeImg = await singlePokemonInfo.data.sprites.other['official-artwork'].front_default
+							temp.push({
+								name: pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1),
+								apiName: pokemon.name,
+								url: pokemon.url,
+								img: pokeImg,
+								size: {
+									height: singlePokemonInfo.data.height,
+									weight: singlePokemonInfo.data.weight
+								},
+								captured: false,
+							})
+							localStorage.setItem('pokeList', JSON.stringify(temp))
+							localStorage.setItem('start', state.start)
+							localStorage.setItem('end', state.end)
+						}
+						setState({
+							...state,
+							isDataReady: true,
+							pokemonArray: temp,
+						})
+					})()
+				})
+		}
 	}, [])
 
 	const nextPage = () => {
@@ -35,6 +75,8 @@ const App = () => {
 			start: state.start += 20,
 			end: state.end += 20,
 		})
+		localStorage.setItem('start', state.start)
+		localStorage.setItem('end', state.end)
 	}
 	const prevPage = async () => {
 		if (state.start <= 0) {
@@ -45,35 +87,56 @@ const App = () => {
 			start: state.start -= 20,
 			end: state.end -= 20,
 		})
+		localStorage.setItem('start', state.start)
+		localStorage.setItem('end', state.end)
 	}
 
-	const viewPokemonDetail = (pokemonName) => () => {
-		history.push(`pokemon-details:${pokemonName}`, {id: pokemonName})
+	const viewPokemonDetail = (pokemonInfo) => () => {
+		history.push(`pokemon-details:${pokemonInfo.apiName}`, { id: pokemonInfo })
 	}
 
-	const goToPage = () => {
-	}
 
 	return (
-		<div className="App">
+		<main className='landing-main'> {/* implementare cambio di sfondo dinamico in base all ora della giornata */}
 			{
-				state.pokemonArray.slice(state.start, state.end).map((item, index) => {
-					return (
-						<div style={{
-							cursor: 'pointer',
-							backgroundColor: 'lightgrey',
-							marginBottom: '.5rem'
-						}}
-							key={index}
-							onClick={viewPokemonDetail(item.name)}>{item.name}
-						</div>
-					)
-				})
+				state.isDataReady &&
+				<>
+					<h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>POKEDEX</h1>
+					<div className="landing-main-pokedex">
+						{console.log('render')}
+						{
+							state.pokemonArray.slice(parseInt(localStorage.getItem('start')), parseInt(localStorage.getItem('end'))).map((item, index) => {
+								return (
+									<div className='landing-pokemon-card' onClick={viewPokemonDetail(item)} key={index}>
+										<div
+											key={index}
+										>{item.name}
+										</div>
+										<img src={item.img} alt="" />
+										<div className='landing-pokeball-placeholder'>
+
+										</div>
+									</div>
+								)
+							})
+						}
+					</div>
+				</>
 			}
-			<button onClick={nextPage}>next page</button>
-			<button onClick={prevPage}>previous page</button>
-			<button onClick={goToPage}>Specific Pokemon</button>
-		</div>
+			{
+				state.isDataReady &&
+				<div className='landing-btn-container'>
+					{/* da convertire in componenti */}
+					<button onClick={prevPage}>Previous</button>
+					<button onClick={nextPage}>Next</button>
+				</div>
+			}
+
+			{
+				state.isDataReady === false &&
+				<div><span style={{ fontSize: '35px' }}>LOADING...</span></div>
+			}
+		</main>
 	);
 }
 
