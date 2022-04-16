@@ -8,7 +8,7 @@ const App = () => {
 
   let data = [];
   let history = useHistory()
-
+  //test
   const [state, setState] = useState({
     pokemonArray: data,
     isDataReady: false,
