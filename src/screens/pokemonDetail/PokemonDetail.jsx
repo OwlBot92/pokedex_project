@@ -1,16 +1,12 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router';
 import '../pokemonDetail/PokemonDetail.css'
 import { PokedexScreen } from 'fathom-story-comp';
 
 
 const PokemonDetail = (props) => {
-	/* console.log(props.location.state.id); */
 	let routePokeData = props.location.state.id
 	let history = useHistory();
-	const [pokemonInfo, setPokemonInfo] = useState(routePokeData);
-	const [dataReceived, setDataReceived] = useState(false);
 	console.log(routePokeData);
 
 	const goHome = () => {
@@ -20,10 +16,10 @@ const PokemonDetail = (props) => {
 	return (
 		<div className='detail-pokemon-main'>
 			<PokedexScreen
-				name={pokemonInfo.name}
-				weight={pokemonInfo.size.height}
-				height={pokemonInfo.size.weight}
-				imgUrl={pokemonInfo.img}
+				name={routePokeData.name}
+				weight={routePokeData.size.height}
+				height={routePokeData.size.weight}
+				imgUrl={routePokeData.img}
 				onPress={goHome}
 			/>
 		</div>

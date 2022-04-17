@@ -2,13 +2,15 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { PokemonCard } from 'fathom-story-comp';
+import LottieLoading from '../../components/loading/LottieLoading';
 
 import './Landing.css'
 const App = () => {
-
+  /* HOOKS & DATA */
   let data = [];
   let history = useHistory()
-  //test
+
+  /* STATE */
   const [state, setState] = useState({
     pokemonArray: data,
     isDataReady: false,
@@ -16,6 +18,7 @@ const App = () => {
     end: 20,
   });
 
+  /* COMPONENT LYFECYCLE */
   useEffect(() => {
     let temp = [];
     let pokeStorage = JSON.parse(localStorage.getItem('pokeList')) //se non e` ancora stato inizializzato torna null
@@ -68,6 +71,7 @@ const App = () => {
     }
   }, [])
 
+  /* FUNCTIONS */
   const nextPage = () => {
     if (state.start >= 151) {
       return;
@@ -92,12 +96,11 @@ const App = () => {
     localStorage.setItem('start', state.start)
     localStorage.setItem('end', state.end)
   }
-
   const viewPokemonDetail = (pokemonInfo) => () => {
     history.push(`pokemon-details:${pokemonInfo.apiName}`, { id: pokemonInfo })
   }
 
-
+  /* RENDER */
   return (
     <main className='landing-main'> {/* implementare cambio di sfondo dinamico in base all ora della giornata */}
       {
@@ -123,6 +126,7 @@ const App = () => {
         </>
       }
       {
+
         state.isDataReady &&
         <div className='landing-btn-container'>
           {/* da convertire in componenti */}
@@ -133,7 +137,9 @@ const App = () => {
 
       {
         state.isDataReady === false &&
-        <div><span style={{ fontSize: '35px' }}>LOADING...</span></div>
+        <>
+          <LottieLoading />
+        </>
       }
     </main>
   );
