@@ -106,7 +106,7 @@ const App = () => {
   const viewPokemonDetail = (pokemonInfo) => () => {
     history.push(`pokemon-details:${pokemonInfo.apiName}`, { id: pokemonInfo })
   }
-  /* RENDER */
+  /* RENDER */ //test
   return (
     <main className='landing-main'> {/* implementare cambio di sfondo dinamico in base all ora della giornata */}
       {
