@@ -1,4 +1,4 @@
-.landing-main{
+.landing-main {
     background-color: green;
     min-height: 100vh;
     padding: 2rem 5rem;
@@ -6,12 +6,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url('../../assets/img/pokemon_day_forest.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
 }
-.landing-main-pokedex{
+
+.landing-main-pokedex {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -25,7 +22,7 @@
     border-left: 8px solid var(--secondary-pokedex-red);
 }
 
-.landing-pokemon-card{
+.landing-pokemon-card {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -39,14 +36,15 @@
     border: 4px solid black;
 }
 
-.landing-pokemon-card img{
+.landing-pokemon-card img {
     max-width: 200px;
 }
 
-.landing-btn-container{
+.landing-btn-container {
     padding-top: 2rem;
 }
-.landing-btn-container button{
+
+.landing-btn-container button {
     cursor: pointer;
     font-family: 'Press Start 2P', cursive;
     padding: 10px 25px;
@@ -55,7 +53,8 @@
     color: black;
     transition: .4s;
 }
-.landing-btn-container button:hover{
+
+.landing-btn-container button:hover {
     background-color: black;
     color: white;
 }

@@ -4,11 +4,23 @@ import { useHistory } from 'react-router-dom';
 import { PokemonCard } from 'fathom-story-comp';
 import LottieLoading from '../../components/loading/LottieLoading';
 
+import backgroundDay from '../../assets/img/pokemon_day_forest.png';
+import backgroundNoon from '../../assets/img/pokemon_noon_forest.png';
+import backgroundNight from '../../assets/img/pokemon_night_forest.png';
+
 import './Landing.css'
+import * as dayjs from 'dayjs'
+
+
+
 const App = () => {
   /* HOOKS & DATA */
   let data = [];
   let history = useHistory()
+  let hour = dayjs().hour()
+
+
+  console.log('CURRENT HOUR', hour);
 
   /* STATE */
   const [state, setState] = useState({
@@ -107,8 +119,16 @@ const App = () => {
     history.push(`pokemon-details:${pokemonInfo.apiName}`, { id: pokemonInfo })
   }
   /* RENDER */ //test
+  /* cambio di sfondo dinamico in base all ora della giornata */
   return (
-    <main className='landing-main'> {/* implementare cambio di sfondo dinamico in base all ora della giornata */}
+    <main className='landing-main' style={{
+      backgroundImage: `url(${hour >= 6 && hour <= 14 ? backgroundDay :
+        hour >= 15 && hour <= 20 ? backgroundNoon :
+          backgroundNight})`,
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+    }}>
       {
         state.isDataReady &&
         <>
